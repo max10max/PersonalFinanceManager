@@ -20,7 +20,7 @@ public class MyServer implements Runnable, Serializable {
     @Override
     public void run() {
 
-        if(file.exists()){
+        if (file.exists()) {
             try {
                 shoppingList = loadFromBin();
             } catch (IOException e) {
@@ -52,7 +52,7 @@ public class MyServer implements Runnable, Serializable {
                     shoppingList.add(new Product(title, date, sum));
                     System.out.println("Сообщение получено");
 
-                    String jsonOut = MaxCategory.infoByCategory(shoppingList);
+                    String jsonOut = MaxCategory.answerForClient(shoppingList);
                     out.println(jsonOut);
                     saveBIn();
                 }
@@ -63,18 +63,16 @@ public class MyServer implements Runnable, Serializable {
         }
     }
 
-
-    public void saveBIn() throws IOException{
-        try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file))){
+    public void saveBIn() throws IOException {
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file))) {
             out.writeObject(this);
         }
     }
 
     public static List<Product> loadFromBin() throws IOException, ClassNotFoundException {
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))){
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))) {
             MyServer temp = (MyServer) in.readObject();
             return temp.getShoppingList();
-
         }
     }
 }
