@@ -1,5 +1,8 @@
 import com.google.gson.Gson;
+
+import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class MaxCategory {
 
@@ -35,8 +38,7 @@ public class MaxCategory {
                 .max(Comparator.comparing(Map.Entry::getValue)).orElse(null);
         MaxCategory maxCategory = new MaxCategory(searchMax.getKey(), searchMax.getValue());
         Gson gson = new Gson();
-        String jsn = "{\"maxCategory\":" + gson.toJson(maxCategory) + "}";
-        System.out.println(jsn);
+        String jsn = gson.toJson(maxCategory);
         return jsn;
     }
 
@@ -54,5 +56,24 @@ public class MaxCategory {
         return shoppingCategory;
     }
 
+    public static String answerForClient(List<Product> shoppingList) {
+        LocalDate lastDateBuy = shoppingList.get(shoppingList.size() - 1).getDate();
+        List<Product> maxYearCategoty = shoppingList.stream()
+                .filter(prod -> prod.getDate().getYear() == lastDateBuy.getYear())
+                .collect(Collectors.toList());
+        List<Product> maxMonthCategoty = shoppingList.stream()
+                .filter(prod -> (prod.getDate().getYear() == lastDateBuy.getYear() &&
+                        prod.getDate().getMonthValue() == lastDateBuy.getMonthValue()))
+                .collect(Collectors.toList());
+        List<Product> maxDayCategoty = shoppingList.stream()
+                .filter(prod -> (prod.getDate().getYear() == lastDateBuy.getYear() &&
+                        prod.getDate().getMonthValue() == lastDateBuy.getMonthValue() &&
+                        prod.getDate().getDayOfMonth() == lastDateBuy.getDayOfMonth()))
+                .collect(Collectors.toList());
+        String answer = "{\"maxCategory\":" + infoByCategory(shoppingList) + ", \"maxYearCategory\": " +
+                infoByCategory(maxYearCategoty) + ", \"maxMonthCategory\": " + infoByCategory(maxMonthCategoty) +
+                ", \"maxDayCategory\": " + infoByCategory(maxDayCategoty) + "}";
+        return answer;
+    }
 
 }

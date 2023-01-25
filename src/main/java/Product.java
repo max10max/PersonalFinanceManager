@@ -1,13 +1,16 @@
 import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Product implements Serializable{
+public class Product implements Serializable {
     private String name;
     private String category;
-    private String date;
+    private LocalDate date;
     private int sum;
-      public static File file = new File("categories.tvs");
+    public static File file = new File("categories.tvs");
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 
     private static Map<String, String> categoriesProducts = new LinkedHashMap<>();
 
@@ -21,7 +24,7 @@ public class Product implements Serializable{
 
     public Product(String name, String date, int sum) {
         this.name = name;
-        this.date = date;
+        this.date = LocalDate.parse(date, formatter);
         this.sum = sum;
         if (categoriesProducts.get(name) != null) {
             this.category = categoriesProducts.get(name);
@@ -50,7 +53,7 @@ public class Product implements Serializable{
         return category;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
@@ -67,7 +70,7 @@ public class Product implements Serializable{
     }
 
     public void setDate(String date) {
-        this.date = date;
+        this.date = LocalDate.parse(date, formatter);
     }
 
     public void setSum(int sum) {
