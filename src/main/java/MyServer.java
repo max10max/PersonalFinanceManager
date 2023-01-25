@@ -9,7 +9,7 @@ import java.util.List;
 
 public class MyServer implements Runnable, Serializable {
 
-    private static final int PORT = 8080;
+    private static final int PORT = 8989;
     private static final File file = new File("data.bin");
     private List<Product> shoppingList;
 
